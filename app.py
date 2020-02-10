@@ -34,9 +34,12 @@ def create_svg(latex, imports_data=[],
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/',methods=['POST'])
 def hello():
-    latex = request.args.get("l", "Hello World")
+    data = request.get_json()
+    latex = data['latex']
+    imports_data = data['imports']
+    print(data)
     output_file = create_svg(latex)
     print(output_file)
     return send_file(output_file, mimetype='image/svg+xml', attachment_filename='output.svg')
