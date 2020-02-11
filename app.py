@@ -18,10 +18,14 @@ latex = 'Hello World'
 imports_data = [
         'amsmath'
 ]
-def create_svg(latex, imports_data=[], 
-        tex_file_path = './docs/output.tex', dvi_file_path = './docs/output.dvi',
-        svg_file_path = './docs/output.svg', output_directory = './docs'):
+def create_svg(latex, imports_data=[], output_directory = './docs'):
     doc = to_latex_doc(latex,imports_data)
+
+    file_name = hash(doc)
+    tex_file_path = os.path.join(output_directory,'%s.tex'%file_name)
+    dvi_file_path = os.path.join(output_directory,'%s.dvi'%file_name)
+    svg_file_path = os.path.join(output_directory,'%s.svg'%file_name)
+
     with open(tex_file_path,'w') as f:
         f.write(doc)
 
