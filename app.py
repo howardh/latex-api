@@ -1,5 +1,6 @@
 import os
 from flask import Flask, escape, request, send_file
+from flask_cors import CORS
 
 latex_template = """
 \\documentclass{article}
@@ -33,13 +34,19 @@ def create_svg(latex, imports_data=[],
     return svg_file_path
 
 app = Flask(__name__)
+CORS(app)
+
+@app.route('/',methods=['GET'])
+def foo():
+    latex = request.args.get("l", "")
+    imports_data = []
+    output_file = create_svg(latex)
+    return send_file(output_file, mimetype='image/svg+xml', attachment_filename='output.svg')
 
 @app.route('/',methods=['POST'])
-def hello():
+def bar():
     data = request.get_json()
     latex = data['latex']
     imports_data = data['imports']
-    print(data)
     output_file = create_svg(latex)
-    print(output_file)
     return send_file(output_file, mimetype='image/svg+xml', attachment_filename='output.svg')
